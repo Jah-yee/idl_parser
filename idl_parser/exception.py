@@ -1,7 +1,6 @@
 """Exceptions raised while parsing."""
 
 
-
 class IDLParserException(Exception):
     """Base class of the exceptions of idl_parser.
 
@@ -18,9 +17,11 @@ class IDLParserException(Exception):
     @property
     def message(self):
         """The message with the file name, line number and exception class:
-        ``File "a.idl", line 3, (InvalidIDLSyntaxError):"...``.
+        ``File "a.idl", line 3, (InvalidIDLSyntaxError):"..."``.
         """
-        return 'File "' + self.file_name + '", line %s, ' % self.line_number + '(' + self._className + '):"' + self._message
+        file_part = ('File "' + (self.file_name or '') + '", ') if self.file_name else ''
+        line_part = ('line ' + str(self.line_number) + ', ') if self.line_number else ''
+        return file_part + line_part + '(' + self._className + '):"' + (self._message or '') + '"'
 
     @property
     def line_number(self):
